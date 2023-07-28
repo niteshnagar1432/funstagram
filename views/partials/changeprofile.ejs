@@ -1,0 +1,40 @@
+<div class="changeProfileBox" style="padding: 0 !important; display: none;">
+    <div class="box-change d-flex" style="width: 65vw; height: 85vh; padding: 0; position: relative;">
+        <i class="ri-close-line" id="closeBtn" style="top: -10%;right: -22%;"></i>
+        <div class="container">
+            <img class="postImgUrl" src="" alt="" style="object-fit: contain; width: 100%; height: 100%;">
+        </div>
+        <div class="container comment-box" style="position: relative;">
+            <div class="header"
+                style="position: absolute;top: 3px;right: 3px;width: 100%;height: 10vh;background-color: black; border-top-left-radius: 5px;border-top-right-radius: 5px;display: flex;align-items: center;justify-content: space-between;padding: 0px 20px;">
+                <div class="profile-detailes"
+                    style="display: flex;align-items: center;justify-content: center;gap: 10px;">
+                    <img class="header-img" src="" alt=""
+                        style="width: 35px;height: 35px;object-fit: cover;object-position: center;border-radius: 50%;">
+                    <span class="text-white header-name"></span>
+                </div>
+                <i class="ri-information-line text-white" style="font-size: 25px; font-weight: 500;"></i>
+            </div>
+            <div class="comment-aria">
+                <!-- there will be comment appiar -->
+            </div>
+            <input class="postId" type="text" value="" style="display: none;">
+            <div class="footer"
+                style="position: absolute;bottom: 3px;right: 3px;width: 100%;height: 10vh;background-color: black; border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;">
+                <form id="commentId" method="get"
+                    style="display: flex;align-items: center;justify-content: space-between;padding: 0px 20px;padding-top: 5px;">
+                    <div class="input-box" style="width: 90%;height: 8vh;">
+                        <input type="text" class="comment-input" placeholder="Comment..."
+                            style="padding: 0px 10px; color: aliceblue; width: 100%;height: 100%;border-radius: 5px; border: none;outline: none;background-color: rgba(255, 228, 196, 0.594);">
+                    </div>
+                    <button class="comment-sendd" style="background-color: transparent;border: none;outline: none;"><i
+                            class="ri-send-plane-fill text-white" style="font-size: 25px; font-weight: 500;"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="notification-box">
+        <span class="msg">comment sent...</span>
+    </div>
+</div>

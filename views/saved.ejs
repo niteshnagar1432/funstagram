@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>@ <%= userData.username %>
+    </title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="./stylesheets/style.css">
+</head>
+
+<body>
+    <div class="main">
+        <% include ./partials/changeprofile.ejs %>
+        <% include ./partials/left-panel.ejs %>
+            <div class="right-pannel">
+                <div class="story-container">
+                    <div class="story-box d-flex">
+                        <div class="story-add">
+                            <img class="profileImg" alt="" style="border: 1px solid white;">
+                            <i class="ri-add-line"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-container d-flex" style="flex-direction: column;">
+                    <div class="post-semi-container">
+                        <% if(userData.saved.length==0){ %>
+                            <br>
+                            <br>
+                            <br>
+                            <center class="mt-5">
+                                <h1><i class="ri-image-add-line text-white"
+                                        style="padding: 15px; background-color: rgba(91, 71, 71, 0.594); border-radius: 50%;box-shadow: 1px 2px 10px salmon;"></i>
+                                </h1>
+                                <h4 class="mt-5" style="color: rgba(58, 56, 56, 0.728);">NO SAVED POST YET....!</h4>
+                            </center>
+                            <% }else{ %>
+                                <% userData.saved.forEach(function(post){ %>
+                                    <div class="post-box">
+                                        <div class="post-header">
+                                            <div class="profile-info">
+                                                <img src="/images/uploades/<%= post.account.profile[post.account.profile.length-1].url %>" alt="">
+                                                <div class="username">
+                                                    <%= post.account.username %> <br>
+                                                    <span><%= post.description %></span>
+                                                </div>
+                                            </div>
+                                            <div class="details">
+                                                <i class="ri-information-line"></i>
+                                            </div>
+                                        </div>
+                                        <img src="/images/uploades/<%= post.url %>" alt="">
+                                        <div class="post-comment" style="display: none;">
+                                            <form action="/comment/<%= post._id %>" method="post">
+                                                <div class="input-box">
+                                                    <input name="comment" type="text" placeholder="Comment ...">
+                                                </div>
+                                                <div class="send-icon">
+                                                    <button><i class="ri-send-plane-fill"></i></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="post-footer">
+                                            <div class="icons">
+                                                <% if(post.like.indexOf(userData.username)==-1){ %>
+                                                    <a href="/like/post/<%= post._id %>"
+                                                        style="text-decoration: none;"><i
+                                                            class="ri-heart-2-line"></i></a>
+                                                    <% }else{ %>
+                                                        <a href="/like/post/<%= post._id %>"
+                                                            style="text-decoration: none;"><i class="ri-heart-2-fill"
+                                                                style="color: rgb(197, 86, 123);"></i></a>
+                                                        <% } %>
+                                                            <sub>
+                                                                <%= post.like.length %>
+                                                            </sub>
+                                                            <a onclick="openPost(`<%= post._id %>`)" style="text-decoration: none; cursor: pointer;"><i
+                                                                    class="ri-chat-1-line"></i></a>
+                                                            <sub>
+                                                                <%= post.comments.length %>
+                                                            </sub>
+                                                            <a href="" style="text-decoration: none;"><i
+                                                                    class="ri-send-plane-fill"></i></a>
+                                                            <sub>
+                                                                <%= post.shere.length %>
+                                                            </sub>
+                                            </div>
+                                            <div class="save">
+                                                        <a href="/save/<%= post._id %>" style="text-decoration: none;"><i class="ri-bookmark-fill"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }) %>
+                                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-info">
+                    <img class="profileImg" alt="?"
+                        style="max-width: 200px; max-height: 250px; border: 3px solid white; border-radius: 3px;">
+                    <div class="details">
+                        <div class="follow"
+                            style="color: white; font-family: 'voyage';letter-spacing: 1.2px;font-size: 22px;">
+                            @ <span class="profileUser"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+        </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+        </script>
+<% include ./partials/footer.ejs %>

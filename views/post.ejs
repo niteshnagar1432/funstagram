@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>
+        <%= userData.username %>
+    </title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="./stylesheets/style.css">
+</head>
+
+<body>
+    <div class="main">
+        <% include ./partials/left-panel.ejs %>
+            <div class="right-pannel">
+                <div class="story-container">
+                    <div class="story-box d-flex">
+                        <div class="story-add">
+                            <img class="profileImg"
+                                alt="">
+                            <i class="ri-add-line"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-container d-flex" style="flex-direction: column;">
+                    <div class="post-semi-container">
+                        <div class="post-box mt-5">
+                            <form action="/createpost/<%= userData._id %>" method="post" enctype="multipart/form-data">
+                                <div class="row d-flex">
+                                    <div class="col">
+                                        <center><h1><i class="ri-image-add-line text-white" style="padding: 15px; background-color: rgba(139, 70, 70, 0.594); border-radius: 50%;box-shadow: 1px 2px 10px salmon;"></i></h1></center>
+                                        <div class="form-group">
+                                            <div class="mb-3">
+                                                <label for="formFile" class="form-label text-white">choose file</label>
+                                                <input name="postfile" class="form-control" type="file" id="formFile">
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group">
+                                            <label for="floatingTextarea2" class="form-label text-white">Post Description</label>
+                                            <div class="form-floating">
+                                                <textarea name="description" class="form-control" placeholder="Leave a comment here"
+                                                    id="floatingTextarea2" style="height: 100px"></textarea>
+                                                <label for="floatingTextarea2">Post Description</label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <button type="submit" class="btn btn-primary">post</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-info">
+                    <img class="rounded float-end img-thumbnail profileImg" alt="?" style="max-width: 200px; max-height: 250px;">
+                    <div class="details">
+                        <div class="follow"
+                            style="color: white; font-family: 'voyage';letter-spacing: 1.2px;font-size: 22px;"> 
+                            @ <span class="profileUser"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+        </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+        </script>
+<% include ./partials/footer.ejs %>

@@ -1,0 +1,175 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+    integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    var profileImg = document.querySelectorAll('.profileImg');
+    var profileUser = document.querySelectorAll('.profileUser');
+    var profileUserName = document.querySelectorAll('.profileUserName');
+    var profileUserEmail = document.querySelectorAll('.profileUserEmail');
+    var profileUserEId = document.querySelectorAll('.profileUserId');
+    var profileUserPost = document.querySelector('.profileUserPost');
+    var profileUserFollowing = document.querySelector('.profileUserFollowing');
+    var profileUserFollower = document.querySelector('.profileUserFollower');
+    function getLoggedInUser() {
+        axios.get('/loggedinuser')
+            .then(function (Data) {
+                var userData = Data.data.user;
+                profileImg.forEach(function (img) {
+                    img.setAttribute('src', `/images/uploades/${userData.profile[userData.profile.length - 1].url}`);
+                })
+                profileUser.forEach(function (user) {
+                    user.innerHTML = `${userData.username}`;
+                });
+                profileUserName.forEach(function (username) {
+                    username.innerHTML = `${userData.name}`;
+                });
+                profileUserEId.forEach(function (id) {
+                    id.innerHTML = `${userData._id}`;
+                });
+                profileUserEmail.forEach(function (email) {
+                    email.innerHTML = `${userData.email}`;
+                })
+                profileUserPost.innerHTML = `${userData.post.length} Post`;
+                profileUserFollowing.innerHTML = `${userData.following.length} Following`;
+                profileUserFollower.innerHTML = `${userData.folower.length} Follower`;
+            });
+    }
+    getLoggedInUser();
+    // -------------------------------------open Post----------------------------------------------
+    var changeProfileBox = document.querySelector('.changeProfileBox');
+    var closeBtn = document.querySelector('#closeBtn');
+    var postImgUrl = document.querySelector('.postImgUrl');
+    var commentId = document.querySelector('#commentId');
+    var headerName = document.querySelector('.header-name');
+    var headerImg = document.querySelector('.header-img');
+    var commentAria = document.querySelector('.comment-aria');
+    var commentInput = document.querySelector('.comment-input');
+    var commentSend = document.querySelector('.comment-sendd');
+    var postId = document.querySelector('.postId');
+    var notificationBox = document.querySelector('.notification-box');
+
+    commentSend.addEventListener('click', (e) => {
+        e.preventDefault();
+        axios.get(`/axios/comment/${postId.value}/${commentInput.value}`)
+            .then((response) => {
+                setTimeout(function () {
+                    notificationBox.classList.remove('active');
+                    notificationBox.classList.add('removed');
+                }, 3000);
+                notificationBox.classList.add('active');
+                commentInput.value = '';
+                commentAria.innerHTML = '';
+                commentGenretare(response.data.comments.reverse());
+            })
+
+    })
+
+    function openPost(post) {
+        commentAria.innerHTML = '';
+        axios.get(`/po/${post}`)
+            .then(function (post) {
+                console.log(post);
+                changeProfileBox.style.display = 'flex';
+                postId.setAttribute('value', `${post.data.post._id}`);
+                postImgUrl.setAttribute('src', `/images/uploades/${post.data.post.url}`);
+                headerName.innerHTML = `${post.data.post.account.username}`;
+                headerImg.setAttribute('src', `/images/uploades/${post.data.post.account.profile[post.data.post.account.profile.length - 1].url}`);
+                commentGenretare(post.data.post.comments.reverse());
+            });
+    }
+
+    function commentGenretare(data) {
+        var com = '';
+        if (data.length === 0) {
+            commentAria.innerHTML = '<center><h5 style="color:red;">No comments ...</h5></center>';
+        } else {
+            data.forEach(comment => {
+                com += `<div class="comment">
+              <div class="head">
+                <div class="user-d">
+                  <img src="/images/uploades/${comment.user.profile[comment.user.profile.length - 1].url}" alt="">
+                  <span>${comment.user.username}</span>
+                </div>
+                <i class="ri-more-2-fill"></i>
+              </div>
+              <div class="body">
+                ${comment.comment}
+              </div>
+            </div>`;
+            });
+            commentAria.innerHTML = com;
+        }
+    }
+
+    closeBtn.addEventListener('click', function () {
+        changeProfileBox.style.display = 'none';
+    });
+    // ---------------------------------------get Story-------------------------------------------
+    var storyContainer = document.querySelector('.storyContainer');
+    var storyUserCurrentImg = document.querySelector('.storyUserCurrentImg');
+    var storyUserCurrentUserName = document.querySelector('.storyUserCurrentUserName');
+    var storyCurrentStatus = document.querySelector('.storyCurrentStatus');
+    var storyCurrentImg = document.querySelector('.storyCurrentImg');
+    var storyCurrentVideo = document.querySelector('.storyCurrentVideo');
+    var storyCurrentBody = document.querySelector('.storyCurrentBody');
+    var stopStory = document.querySelector('.stopStory');
+
+    function getStory(accountId) {
+        axios.get(`/axios/story/${accountId}`)
+            .then((response) => {
+                var userStoryData = response.data;
+                storyContainer.style.display = 'flex';
+                storyUserCurrentUserName = userStoryData.username;
+                storyUserCurrentImg.setAttribute('src', `/images/uploades/${userStoryData.profile[userStoryData.profile.length - 1].url}`);
+                if (userStoryData.story[0].url.includes('.mp4')) {
+                    storyCurrentBody.innerHTML = `<video class="storyCurrentVideo" src="/images/uploades/${userStoryData.story[0].url}" muted autoplay></video>`;
+                    storyCurrentVideo = document.querySelector('.storyCurrentVideo');
+                    storyCurrentVideo.muted = false;
+                    storyCurrentVideo.addEventListener('loadedmetadata', () => {
+                        const videoDuration = storyCurrentVideo.duration;
+                        var finalDuration = videoDuration * 1000;
+                        IncreceSatuS(finalDuration);
+                        setTimeout(() => {
+                            storyCurrentVideo.muted = true;
+                            storyContainer.style.display = 'none';
+                        }, finalDuration);
+                    });
+                } else {
+                    storyCurrentBody.innerHTML = `<img class="storyCurrentImg" src="/images/uploades/${userStoryData.story[0].url}" alt="">`;
+                    IncreceSatuS(5000);
+                    setTimeout(() => {
+                        storyContainer.style.display = 'none';
+                    }, 5000);
+                }
+            })
+    }
+
+    stopStory.addEventListener('click',()=>{
+        storyCurrentVideo.muted = true;
+        storyContainer.style.display = 'none';
+    })
+
+    function IncreceSatuS(a) {
+        const animationDuration = a; // Animation duration in milliseconds
+        const animationInterval = 10; // Interval between width increments in milliseconds
+
+        let currentWidth = 0;
+        const increment = 100 / (animationDuration / animationInterval);
+
+        const animation = setInterval(() => {
+            currentWidth += increment;
+            storyCurrentStatus.style.width = `${currentWidth}%`;
+
+            if (currentWidth >= 100) {
+                clearInterval(animation);
+            }
+        }, animationInterval);
+    }
+
+</script>
+</body>
+
+</html>

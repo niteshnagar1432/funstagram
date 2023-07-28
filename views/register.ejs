@@ -1,0 +1,61 @@
+<% include ./partials/header.ejs %>
+  <div class="container p-5">
+    <div class="container p-5 mt-3 pb-0">
+      <div class="container d-flex"
+        style="background-color: #679B8D; height: 60vh; border-radius: 10px; align-items: center;justify-content: space-between;">
+        <div class="container d-flex" style="align-items: center;justify-content: center;">
+          <img src="./images/3d-casual-life-fingerprint-blockchain.png" alt="">
+        </div>
+        <div class="container d-flex" style="align-items: center;justify-content: center;">
+          <form action="/register" method="post" class="d-flex" style="flex-direction: column;justify-content: center;">
+            <label class="text-white mb-1" for="username">User_Name</label>
+            <div class="box-input" style="max-width: 30vw;">
+              <input class="form-control usernameinp" name="username" type="text">
+            </div>
+            <br>
+            <label class="text-white mb-1" for="email">Email</label>
+            <div class="box-input" style="max-width: 30vw;">
+              <input class="form-control" name="email" type="text">
+            </div>
+            <br>
+            <label class="text-white mb-1" for="password">Password</label>
+            <div class="box-input" style="max-width: 30vw;">
+              <input class="form-control" name="password" type="password">
+            </div>
+            <br>
+            <button id="btnSubmit" type="submit" class="btn btn-primary">Register</button>
+            <a href="./" class="text-white mt-2">Log-in</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+    integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    var usernameinp = document.querySelector('.usernameinp');
+    var btnSubmit = document.querySelector('#btnSubmit');
+    usernameinp.addEventListener('input', function () {
+      var val = usernameinp.value;
+      if (val.trim().length > 0) {
+        axios.get(`/checkuser/${val}`)
+          .then(function (data) {
+            if (data.data.user) {
+              usernameinp.style.borderColor = 'red';
+              usernameinp.style.borderWidth = '3px';
+              btnSubmit.setAttribute('disabled',true);
+            } else {
+              btnSubmit.removeAttribute('disabled',true);
+              usernameinp.style.borderWidth = '3px';
+              usernameinp.style.borderColor = 'blue';
+            }
+          })
+        } else {
+        btnSubmit.removeAttribute('disabled',true);
+        usernameinp.style.borderWidth = '0px';
+        usernameinp.style.borderColor = 'none';
+      }
+    });
+  </script>
+  <% include ./partials/footer.ejs %>

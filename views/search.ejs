@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>
+        <%= userData.username %>
+    </title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="./stylesheets/style.css">
+</head>
+
+<body>
+    <div class="main">
+        <% include ./partials/left-panel.ejs %>
+            <div class="right-pannel">
+                <div class="story-container" style="height: auto; padding: 10px;">
+                    <div class="story-box d-flex" style="width: auto;height: auto;padding-left: 10px;">
+                        <form action="/s" method="post">
+                            <center class="d-flex" style="display: flex;">
+                                <div class="box-input"
+                                    style="max-width: 60vw; width: 50vw !important; margin-right: 5px;">
+                                    <input id="searchInput" class="form-control " name="findName" type="text"
+                                        placeholder="Search here....">
+                                </div>
+                                <!-- <button class="btn btn-primary">search</button> -->
+                            </center>
+                        </form>
+                    </div>
+                </div>
+                <div class="post-container d-flex" style="flex-direction: column;">
+                    <div class="post-semi-container" id="innerPost">
+
+                    </div>
+                </div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-info">
+                    <img class="profileImg" alt="?"
+                        style="max-width: 200px; max-height: 250px; border: 3px solid white; border-radius: 3px;">
+                    <div class="details">
+                        <div class="follow"
+                            style="color: white; font-family: 'voyage';letter-spacing: 1.2px;font-size: 22px;">
+                            @ <span class="profileUser"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+        integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+        </script>
+    <script>
+
+        var searchInput = document.querySelector('#searchInput');
+        var innerPost = document.querySelector('#innerPost');
+        var innerPost = document.querySelector('#innerPost');
+        var statusBtn = document.querySelector('#statusBtn');
+        var myValue;
+        var card = `
+                <center>
+                    <h3>Search Here....</h3>
+                </center>`;
+        innerPost.innerHTML = card;
+        searchInput.addEventListener('input', function () {
+            myValue = searchInput.value.trim();
+            if (myValue.length > 0) {
+                getSearch(myValue);
+            } else {
+                innerPost.innerHTML = '';
+            }
+        });
+
+
+
+        innerPost.addEventListener('click', function (event) {
+            var target = event.target;
+            console.log(target);
+            if (target.classList.contains('box')) {
+                var userbox = target.nextElementSibling;
+                userbox.classList.toggle('d-flex');
+            }
+            if (target.id == 'statusBtn') {
+                var dataId = target.getAttribute('data-id');
+                satusChange(dataId);
+            }
+        });
+
+        function satusChange(id) {
+            axios.get(`/follow/${id}`)
+                .then((data) => {
+                    var satus = data.data;
+                    console.log(satus.msg);
+                    getSearch(myValue);
+                });
+        }
+
+        function getSearch(searchBy) {
+            axios.post(`/s/${searchBy}`)
+                .then(function (data) {
+                    var users = data.data.users;
+                    var userAccount = data.data.accountuser;
+                    console.log(users);
+
+                    if (users.length > 0) {
+                        card = ``;
+                        var satus;
+                        users.forEach((element, index) => {
+                            if (element.folower.includes(userAccount)) {
+                                status = 'Following';
+                            } else {
+                                status = 'Follow';
+                            }
+                            card += `<div class="box"
+                            style="background-color: rgba(52, 50, 50, 0.783);width: 100%;height: 10vh; border-top-left-radius: 5px; border-top-right-radius: 5px; display: flex; align-items: center; justify-content: space-between; padding: 0px 20px; border: 1px solid wheat;margin-top:5px;">
+                            <div class="username" style="color: aliceblue;">@${element.username}
+                            </div>
+                            <div class="userId" style="color: aliceblue; display: flex;align-items: center;
+                            justify-content: center;">
+                                ${element.name} <i class="ri-arrow-down-s-line" style="font-size: 27px;"></i>
+                            </div>
+                        </div>
+                        <div class="userbox  p-2" id="userbox"
+                            style=" display: none; border: 1px solid wheat; width: 100%;height: auto;background-color: rgba(52, 50, 50, 0.783); border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;">
+                            <div class="container">
+                                <div class="user-name text-white">Name :- ${element.name}
+                                </div>
+                                <div class="user-bio text-white">Email :- ${element.email}
+                                </div>
+                                <div class="user-bio text-white">Bio :- ${element.bio}
+                                </div>
+                                <div class="container d-flex mt-3" style="gap: 10px;">
+                                    <div class="follower text-white">
+                                        Follower
+                                        <span style="font-weight: 600;">
+                                            ${element.folower.length}
+                                        </span>
+                                    </div>
+                                    <div class="following text-white">Following <span style="font-weight: 600;">
+                                            ${element.following.length}
+                                        </span></div>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <img class="rounded float-end"
+                                    src="./images/uploades/${element.profile[element.profile.length - 1].url}"
+                                    alt="?"
+                                    style="max-width: 200px; max-height: 250px; border: 3px solid white; border-radius: 3px;">
+                                <div class="details float-end" style="width: 200px;max-height: auto;">
+                                    <div class="follow"
+                                        style="color: white; font-family: 'voyage';letter-spacing: 1.2px;font-size: 22px; display: flex;align-items: center;justify-content: center;">
+                                            <button id="statusBtn" data-id="${element._id}" class="btn btn-primary mt-2">${status}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                        });
+                        innerPost.innerHTML = card;
+                    } else {
+                        card = `
+                        <center>
+                            <h3>No Data Found....</h3>
+                        </center>
+                        `;
+                        innerPost.innerHTML = card;
+                    }
+                })
+        }
+
+    </script>
+    <% include ./partials/footer.ejs %>

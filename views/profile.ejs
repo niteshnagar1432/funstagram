@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>
+    <%= userData.username %>
+  </title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS v5.2.1 -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <link rel="stylesheet" href="./stylesheets/style.css">
+</head>
+
+<body>
+  <div class="main">
+    <% include ./partials/setstory.ejs %>
+    <% include ./partials/changeprofile.ejs %>
+    <% include ./partials/left-panel.ejs %>
+      <div class="profile-right-pannel">
+        <div class="semi-profile-container">
+          <div class="profile-card">
+            <div class="left">
+              <img class="profileImg" alt="">
+            </div>
+            <div class="right">
+              <div class="item-1">
+                <span class="profileUser"></span>
+                <a href="/account/<%= userData._id %>" class="btn btn-primary">Edit</a>
+              </div>
+              <div class="item-2">
+                <span class="profileUserPost"></span>
+                <span class="profileUserFollowing"></span>
+                <span class="profileUserFollower"></span>
+              </div>
+              <div class="item-3">
+                <span class="profileUserName"></span>
+              </div>
+              <div class="item-4">
+                <span class="profileUserEmail"></span>
+              </div>
+              <div class="item-5">
+                <span class="profileUserId"></span>
+              </div>
+            </div>
+          </div>
+          <div class="container">
+            <span>Post </span>
+          </div>
+          <div class="container" id="postContainer">
+            <% post.forEach(function(postU) { %>
+              <img onclick="openPost('<%= postU._id %>');" src="./images/uploades/<%= postU.url %>" alt="">
+              <% }); %>
+          </div>
+
+          <center>SINCE :- <%= userData.time %>
+          </center>
+        </div>
+      </div>
+  </div>
+  <!-- Bootstrap JavaScript Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+    </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+    integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+    integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+    </script>
+    
+  <% include ./partials/footer.ejs %>
