@@ -316,8 +316,11 @@ router.get('/loggedinuser', function (req, res) {
   userModel.findOne({ username: req.session.passport.user })
     .then(function (user) {
       res.json({ user: user });
+    })
+    .catch(function (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
     });
-})
+});
 
 router.get('/saved', isLogedIn, function (req, res, next) {
   userModel.findOne({ username: req.session.passport.user })

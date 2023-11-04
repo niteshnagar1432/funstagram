@@ -1,13 +1,15 @@
 var mongoose = require('mongoose');
 var plm = require('passport-local-mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/funstagram');
+const uri = 'mongodb+srv://niteshnagar1142002:WqmYZATrn2H8P6qm@cluster0.h7rsur3.mongodb.net/funstagram';
 
-// Connect to MongoDB using the constructed URI
-mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch(err => {
+    console.error('Error connecting to MongoDB:', err);
+  });
 
 var userSchema = mongoose.Schema({
   name: String,
